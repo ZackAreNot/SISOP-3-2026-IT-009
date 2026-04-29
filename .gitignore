@@ -1,0 +1,22 @@
+# ========================================
+# IGNORE FILE SOAL 1 (The Knights Console)
+# ========================================
+navi
+wired
+
+# ========================================
+# IGNORE FILE SOAL 2/3 (Battle of Eterion)
+# ========================================
+orion
+eternal
+eterion.db
+*history.txt
+
+# ========================================
+# IGNORE FILE TEMPORARY & SISTEM UMUM
+# ========================================
+*.o
+*.out
+.DS_Store
+.vscode/
+*.swp
