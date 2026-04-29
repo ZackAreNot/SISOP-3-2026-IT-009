@@ -65,7 +65,7 @@ typedef struct {
 } SharedData;
 
 typedef struct {
-    long mytype;
+    long mtype;
     long client_pid;
     char username[50];
     char data1[50];
