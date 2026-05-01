@@ -466,41 +466,60 @@ Jika yang beraktivitas adalah `sd` (salah satu *socket* milik klien yang sudah t
 
 ### Output / Dokumentasi Uji Coba (Test Case & Error Handling)
 
-Berikut adalah hasil pengujian dari berbagai skenario fungsionalitas dan penanganan *error* (*error handling*) pada program *Client* (`navi.c`) dan *Server* (`wired.c`):
+
 
 #### 1. Uji Coba: Koneksi Awal dan Login Klien Biasa
 Pada skenario ini, beberapa klien (entitas) diuji untuk terhubung ke server "The Wired"[cite: 1, 3].
-*   **[Masukkan Screenshot Klien Berhasil Login di Sini]**
-*   **Keterangan:** Saat *client* dijalankan dan memasukkan nama (selain "The Knights"), server akan menerima koneksi, mendaftarkannya ke dalam *array* klien, dan klien mendapatkan pesan `"--- Welcome to The Wired, [Nama] ---"`[cite: 1, 3]. Di sisi server, aktivitas ini tercatat pada file `history.log` sebagai `[User '[Nama]' connected]`[cite: 3].
+
+![Server Menunggu Koneksi](assets/1wired.png)
+![Klien Berhasil Login](assets/2navi1.png)
+
+**Keterangan:** Saat `client` dijalankan dan memasukkan nama (selain "The Knights"), server akan menerima koneksi, mendaftarkannya ke dalam array klien, dan klien mendapatkan pesan `"--- Welcome to The Wired, [Nama] ---"`[cite: 1, 3]. Di sisi server, aktivitas ini tercatat pada file `history.log` sebagai `[User '[Nama]' connected]`[cite: 3].
 
 #### 2. Error Handling: Username Duplikat (Sudah Digunakan)
 Sistem memiliki pengamanan agar tidak ada dua entitas dengan nama yang sama di dalam satu jaringan[cite: 3].
-*   **[Masukkan Screenshot Error Username Duplikat di Sini]**
-*   **Keterangan:** Klien mencoba masuk menggunakan nama yang sedang aktif digunakan oleh klien lain[cite: 3]. Server mendeteksi duplikasi ini melalui *looping* pengecekan, kemudian mengirimkan paket balasan `MSG_LOGIN_FAIL`[cite: 3]. Klien secara otomatis menampilkan pesan error `[System] The identity '[Nama]' is already synchronized in The Wired.` dan program klien langsung ditutup untuk mencegah konflik[cite: 1].
+
+![Error Username Duplikat](assets/3navialready.png)
+
+**Keterangan:** Klien mencoba masuk menggunakan nama yang sedang aktif digunakan oleh klien lain[cite: 3]. Server mendeteksi duplikasi ini melalui *looping* pengecekan, kemudian mengirimkan paket balasan `MSG_LOGIN_FAIL`[cite: 3]. Klien secara otomatis menampilkan pesan error `[System] The identity '[Nama]' is already synchronized in The Wired.` dan program klien langsung ditutup untuk mencegah konflik[cite: 1].
 
 #### 3. Uji Coba: Otentikasi Administrator dan Password Salah
 Pengujian sistem hak istimewa (*privilege*) menggunakan nama "The Knights"[cite: 1].
-*   **[Masukkan Screenshot Login Admin Gagal dan Berhasil di Sini]**
-*   **Keterangan (Error Handling):** Jika *user* menggunakan nama "The Knights" namun salah memasukkan *password* (bukan "protocol7"), program akan memunculkan pesan `[System] Authentication Failed.` dan langsung memutuskan koneksi secara sepihak sebelum paket otentikasi dikirim ke server[cite: 1].
-*   **Keterangan (Sukses):** Jika *password* benar, *user* diakui sebagai Admin dan terminal langsung berubah memunculkan antarmuka khusus `=== THE KNIGHTS CONSOLE ===`[cite: 1].
+
+![Admin Password Salah](assets/6knighterror.png)
+![Admin Login Sukses](assets/7thekbightlogin.png)
+
+**Keterangan (Error Handling):** Jika *user* menggunakan nama "The Knights" namun salah memasukkan password (bukan "protocol7"), program akan memunculkan pesan `[System] Authentication Failed.` dan langsung memutuskan koneksi secara sepihak sebelum paket otentikasi dikirim ke server[cite: 1].
+**Keterangan (Sukses):** Jika *password* benar, *user* diakui sebagai Admin dan terminal langsung berubah memunculkan antarmuka khusus `=== THE KNIGHTS CONSOLE ===`[cite: 1].
 
 #### 4. Uji Coba: Fitur Broadcasting (Chatting)
 Skenario pertukaran pesan antar pengguna biasa secara *real-time*[cite: 1, 3].
-*   **[Masukkan Screenshot Chatting Antar 2-3 Klien di Sini]**
-*   **Keterangan:** Entitas A mengirim pesan, lalu Entitas B dan C akan menerimanya secara *real-time*[cite: 1, 3]. Penanganan *output* menggunakan kode *escape terminal* `\r\033[K` bekerja dengan baik, sehingga pesan masuk tidak merusak tampilan baris input `> ` milik klien yang sedang mengetik[cite: 1]. Pesan *chat* ini juga tidak masuk ke layar Admin, sesuai dengan filter di logika `broadcast` server[cite: 3].
+
+![Percakapan Klien 1](assets/4navipercakapansatu.png)
+![Percakapan Klien 2](assets/5naviperckapan2.png)
+
+**Keterangan:** Entitas A mengirim pesan, lalu Entitas B dan C akan menerimanya secara *real-time*[cite: 1, 3]. Penanganan *output* terminal bekerja dengan baik, sehingga pesan masuk tidak merusak tampilan baris input `> ` milik klien yang sedang mengetik[cite: 1]. Pesan obrolan ini tidak masuk ke layar Admin.
 
 #### 5. Uji Coba: Eksekusi Remote Procedure Call (RPC)
 Pengujian eksekusi perintah khusus dari *console* Admin ke server[cite: 1, 3].
-*   **[Masukkan Screenshot Admin Menjalankan Menu 1 dan 2 di Sini]**
-*   **Keterangan:** Admin menekan angka 1 (`Check Active Entities`), server membalas dengan total jumlah klien yang sedang terhubung[cite: 1, 3]. Admin menekan angka 2 (`Check Server Uptime`), server membalas dengan kalkulasi waktu menyala server (dalam satuan detik)[cite: 1, 3].
+
+![Admin Eksekusi RPC](assets/8theknightcek.png)
+
+**Keterangan:** Admin menggunakan perintah pada console untuk mengecek jumlah klien aktif dan *uptime* server[cite: 1, 3]. Server berhasil memproses RPC tersebut dan membalasnya dengan format `[System]` secara spesifik ke layar Admin saja[cite: 1, 3].
 
 #### 6. Error Handling: Graceful Disconnect dan Emergency Shutdown
 Sistem harus bisa menangani penutupan koneksi secara rapi tanpa membuat server *crash*[cite: 1, 3].
-*   **[Masukkan Screenshot Client /exit dan Admin Shutdown di Sini]**
-*   **Keterangan (Client Exit):** Jika *user* mengetik `/exit` atau menekan `Ctrl+C`, *signal handler* akan mengirimkan paket `MSG_EXIT` ke server[cite: 1]. Server kemudian membersihkan memori *slot* pengguna tersebut dan mencatatnya sebagai `[disconnected]` di log[cite: 3].
-*   **Keterangan (Admin Shutdown):** Admin menekan angka 3 pada *console* (Emergency Shutdown). Server menerima paket `MSG_RPC_SHUTDOWN`, mencatat status darurat di log, lalu mengeksekusi `close()` pada *socket* utama[cite: 1, 3]. Hal ini mematikan server secara total, dan klien-klien yang tersambung akan kehilangan koneksi secara otomatis.
 
----
+![Klien Disconnect](assets/9disconected.png)
+![Perintah Shutdown Admin](assets/10emergencytheknights.png)
+![Server Shutdown](assets/11wiredemergency.png)
+
+**Keterangan (Client Exit):** Jika *user* keluar atau koneksi terputus, server akan membersihkan memori slot pengguna tersebut dan mencatatnya sebagai disconnected di log[cite: 1, 3].
+**Keterangan (Admin Shutdown):** Admin menekan angka 3 (Emergency Shutdown). Server menerima perintah tersebut, mencatat status darurat di log, lalu mematikan gerbang *socket* utama secara total, sehingga koneksi semua klien ikut terputus[cite: 1, 3].
+
+***
+
+
 
 ### Kendala dalam Pengerjaan Soal 1
 
@@ -1022,36 +1041,54 @@ void armory_menu(PlayerData *me) {
 
 ***
 
-### Output / Dokumentasi Uji Coba (Test Case & Error Handling)
+### Output / Dokumentasi Uji Coba (Lanjutan File Asset 12 - 26)
 
-Berikut adalah hasil pengujian skenario fungsionalitas permainan dan komunikasi IPC antara *Server* (`orion.c`) dan *Client* (`eternal.c`):
+#### 7. Uji Coba: Inisialisasi Server dan Client Pertama Kali
+![Server Orion Aktif](assets/12orion.png)
+![Tampilan Awal Client Eternal](assets/13eternalstart.png)
+*   **Keterangan:** Uji coba ini memastikan bahwa *backend* berjalan dengan benar. Gambar `12orion.png` menunjukkan server *daemon* `orion.c` yang berhasil dijalankan, mengalokasikan *Shared Memory* dan *Message Queue*, serta masuk ke mode *listening* (siaga). Gambar `13eternalstart.png` menunjukkan program *client* `eternal.c` yang dijalankan setelah server aktif, berhasil mendeteksi koneksi IPC, dan memunculkan antarmuka awal tanpa *error*.
 
-#### 1. Uji Coba: Koneksi IPC & Validasi Server Aktif
-*   **[Masukkan Screenshot Error "Orion is not ready" & Berhasil Terhubung di Sini]**
-*   **Keterangan (Error):** Jika `eternal` dijalankan sementara server `orion` belum menyala, fungsi `shmget` akan mengembalikan nilai negatif[cite: 6]. Program langsung mendeteksi ini, mencetak pesan error `"Orion is not ready. Exiting..."` dan keluar dengan aman tanpa *crash*[cite: 6].
-*   **Keterangan (Sukses):** Saat server `orion` sudah jalan, `eternal` berhasil menemukan alamat memori IPC dan menampilkan layar otentikasi awal[cite: 6].
+#### 8. Uji Coba: Validasi Autentikasi dan Error Handling Akun
+![Menu Register & Login](assets/14regs.png)
+![Error Belum Terdaftar](assets/15notregistered.png)
+![Pembuatan Akun Baru](assets/16createakun.png)
+![Sukses Login](assets/17welcomelogin.png)
+*   **Keterangan:** 
+    *   Gambar pertama menampilkan antarmuka menu *Login* dan *Register*.
+    *   Gambar kedua membuktikan fungsionalitas *error handling* berjalan dengan baik; ketika pemain mencoba *login* menggunakan *username* yang belum terdaftar di *database* server, sistem menolak akses dan menampilkan pesan *error*.
+    *   Gambar ketiga dan keempat mengonfirmasi bahwa alur pembuatan akun baru berhasil disimpan ke memori server. Pemain kemudian dapat *login* dengan kredensial tersebut dan disambut dengan layar *Welcome*.
 
-#### 2. Uji Coba: Registrasi, Login, dan Pencegahan Multi-Login
-*   **[Masukkan Screenshot Register Berhasil, Login Berhasil, dan Login Gagal (Sedang Online) di Sini]**
-*   **Keterangan:** Akun baru berhasil didaftarkan ke *Shared Memory* dan databasenya tersimpan. Saat pemain masuk, *state* `is_online` berubah menjadi `true`[cite: 8]. Jika terminal lain mencoba masuk menggunakan akun yang sama persis, server menolak *request* tersebut karena memicu *error handling* deteksi *multi-login* ("Wrong credentials or account online")[cite: 6, 8].
+#### 9. Uji Coba: UI Dashboard dan Menu Utama
+![UI Dashboard Pemain](assets/18UIdashboard.png)
+*   **Keterangan:** Menampilkan *User Interface* (UI) utama dari *dashboard* pemain setelah *login*. Uji coba ini memvalidasi bahwa program dapat mengambil (*fetch*) data profil pemain dari *Shared Memory* secara akurat, seperti status HP, Gold awal, dan *Equipment* yang sedang dipakai, lalu merendernya dalam bentuk teks ASCII.
 
-#### 3. Uji Coba: Pembelian di Armory (Sinkronisasi Data)
-*   **[Masukkan Screenshot Menu Armory dan Gold Berkurang di Sini]**
-*   **Keterangan:** Saat pemain membeli *Demon Blade* seharga 1500 G, program mengecek saldo terlebih dahulu[cite: 6]. Jika cukup, Gold terpotong dan *Weapon Damage* bertambah[cite: 6]. Proses ini menggunakan `sem_lock` untuk menembak data baru tersebut ke *Shared Memory* server agar status senjata tersimpan secara permanen[cite: 6].
+#### 10. Uji Coba: Matchmaking Timeout dan Mode PvE (Lawan Bot)
+![Mencari Lawan](assets/19searchinganapponent.png)
+![Masuk Arena Beast](assets/20enteringarenabeast.png)
+![Bertarung Melawan Beast](assets/21vsbeast.png)
+*   **Keterangan:** Menguji logika antrean (*matchmaking logic*). 
+    *   Gambar pertama menunjukkan pemain memasuki mode antrean. Server mengunci status pemain ini sebagai "mencari lawan".
+    *   Gambar kedua memvalidasi sistem *timeout*. Karena tidak ada *client* lain yang ikut mengantre dalam batas waktu tertentu, server memicu *fallback system* dengan melempar pemain ke arena PVE.
+    *   Gambar ketiga menunjukkan antarmuka pertarungan melawan NPC "Wild Beast", memvalidasi bahwa sistem *combat loop* bisa berjalan meskipun tanpa ada koneksi dari pemain kedua.
 
-#### 4. Uji Coba: Matchmaking Timeout (Melawan Bot)
-*   **[Masukkan Screenshot Hitung Mundur Matchmaking & Masuk Arena vs Wild Beast di Sini]**
-*   **Keterangan:** Pemain menekan menu Battle. Terminal menampilkan *timer* hitung mundur 35 detik (`Searching for an opponent...`)[cite: 6]. Karena tidak ada pemain manusia yang bergabung hingga waktu habis, program memicu parameter `is_bot_match = true` dan memunculkan entitas "Wild Beast" dengan HP 120 secara otomatis[cite: 6].
+#### 11. Uji Coba: Transaksi di Armory 
+![Menu Armory](assets/22armory.png)
+*   **Keterangan:** Menampilkan menu Armory tempat pemain bisa membeli senjata atau perlengkapan. Uji coba ini memastikan sistem transaksi berfungsi. Ketika pemain membeli barang, logika program memeriksa saldo Gold, memotongnya, mengubah status senjata pemain di *Shared Memory* (menggunakan proteksi Semaphore agar data tidak korup), dan mengembalikan pemain ke *dashboard* dengan statistik penyerangan (*damage*) yang sudah diperbarui.
 
-#### 5. Uji Coba: Pertarungan Real-Time (Non-Blocking I/O)
-*   **[Masukkan Screenshot Pertarungan Arena yang Menampilkan Combat Log dan Cooldown di Sini]**
-*   **Keterangan:** Uji coba fungsionalitas Terminal *Raw Mode*[cite: 6]. Saat pemain menekan `A` (Attack) atau `U` (Ultimate), *damage* langsung masuk dan HP musuh berkurang seketika tanpa perlu menekan tombol `Enter`[cite: 6]. *Combat log* terbarui secara *real-time* menggeser riwayat teks ke bawah, dan indikator *Cooldown* (CD) bekerja menahan laju serangan pemain[cite: 6].
+#### 12. Uji Coba: Matchmaking PvP (Player vs Player) Sukses
+![Player vs Player](assets/23playervsplayer.png)
+*   **Keterangan:** Uji coba krusial untuk fitur *multiplayer*. Menunjukkan dua terminal *client* `eternal` yang masuk antrean secara bersamaan berhasil dicocokkan oleh server `orion`. Layar transisi membawa kedua pemain masuk ke arena yang sama. Logika sinkronisasi *Real-Time* via IPC tervalidasi berjalan sinkron di kedua layar.
 
-#### 6. Uji Coba: Pembersihan Memori IPC (Make Clear_IPC)
-*   **[Masukkan Screenshot Eksekusi perintah `make clear_ipc` di Sini]**
-*   **Keterangan:** Jika terjadi *bug* saat pengembangan yang menyebabkan memori menggantung, perintah `make clear_ipc` pada Makefile dijalankan[cite: 7]. Perintah ini mencari ID dari Shared Memory, Message Queue, dan Semaphore lalu menghapusnya secara paksa (`ipcrm`) dari RAM sistem operasi[cite: 7].
+#### 13. Uji Coba: Resolusi Pertarungan (Kondisi Menang & Kalah)
+![Layar Kemenangan](assets/24victory.png)
+![Layar Kekalahan](assets/25defeat.png)
+*   **Keterangan:** Menguji kondisi akhir permainan (*game over state*). Ketika HP salah satu entitas mencapai 0, server akan mengeksekusi perhitungan akhir. Gambar *Victory* dimunculkan di layar pemenang (mendapatkan tambahan Gold/XP), sementara *Defeat* dimunculkan di layar pihak yang kalah (kehilangan stat atau kembali ke menu). Uji coba ini memastikan status pemain dikembalikan dari "in-battle" menjadi "idle" di dalam *database* server.
 
----
+#### 14. Uji Coba: Pencatatan Riwayat Pertandingan (History)
+![Riwayat Pertandingan](assets/26history.png)
+*   **Keterangan:** Setelah pertandingan selesai (baik melawan Beast maupun Pemain lain), *client* membuka menu History. Gambar ini membuktikan bahwa program berhasil menulis dan membaca log hasil pertandingan (tanggal, lawan, hasil Win/Loss) yang disimpan baik melalui sistem berkas lokal maupun terpusat di server melalui *Message Queue*.
+
+*** 
 
 ### Kendala dalam Pengerjaan Soal 2
 
@@ -1067,3 +1104,4 @@ Pembuatan game *Terminal Multiplayer* ini memiliki tingkat kesulitan yang jauh l
     Pada awalnya, menggunakan `system("clear")` terus-menerus di dalam *while loop* yang berputar cepat membuat terminal sangat berkedip dan menyakitkan mata. Solusi sementara adalah mengatur jeda menggunakan `usleep(50000)` agar proses pe-render-an antarmuka arena tidak memakan beban CPU secara berlebihan dan kedipan menjadi terminimalisir[cite: 6].
 
 ***
+
