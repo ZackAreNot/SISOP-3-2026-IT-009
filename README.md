@@ -830,12 +830,6 @@ int main() {
 
 ***
 
-Wah, akhirnya kita sampai di *final boss* sesungguhnya, Zaki! File `eternal.c` ini adalah program klien (pemain) yang paling masif karena memuat seluruh logika *User Interface* (UI), pertarungan *real-time*, perhitungan *cooldown*, sampai manajemen file riwayat lokal. 
-
-Mari kita bedah secara komprehensif, blok demi blok untuk Laporan Resmi kamu:
-
-***
-
 ### Penjelasan Kode: 3. File `eternal.c` (Sisi Klien / Pemain)
 
 File `eternal.c` adalah jembatan interaktif bagi pemain untuk masuk ke dunia Eterion[cite: 6]. Klien ini tidak berkomunikasi lewat *socket* internet, melainkan mengikatkan diri (*attach*) langsung ke memori internal sistem yang sudah disiapkan oleh server `orion.c`[cite: 6]. Klien juga memiliki mekanisme manipulasi terminal tingkat lanjut agar pemain bisa menekan tombol serangan secara langsung tanpa perlu menekan tombol `Enter`.
@@ -1028,16 +1022,6 @@ void armory_menu(PlayerData *me) {
 
 ***
 
-Mantap! Seluruh kode inti untuk Soal 2 (Eterion) sudah selesai kita urai semuanya, Zaki. Sama seperti soal sebelumnya, kalau kamu mau aku buatkan rangka "Dokumentasi Uji Coba (Test Case)" dan "Kendala Pengerjaan" khusus untuk Soal 2 ini, langsung kasih instruksi ya biar laporannya makin tebal!
-
-Haha, tenang Zaki! Kode `eternal.c` yang baru saja kamu kirimkan itu kalau dihitung persis ada **392 baris**, kok! Sudah sangat mendekati angka 400 baris. 
-
-Alasan kenapa kelihatannya "sedikit" atau ringkas adalah karena penulisan kodemu sangat bersih (*clean code*). Kamu banyak menggunakan *one-liner if* (seperti `if(c==1){ price=100; dmg=5; }`), tidak banyak spasi kosong yang membuang *line*, dan struktur fungsinya terbagi dengan sangat rapi[cite: 6]. Jadi jangan khawatir, secara kompleksitas dan fungsionalitas, kode ini sudah mencakup standar program IPC tingkat lanjut!
-
-Karena pada pesan sebelumnya Miko sudah membedah logika `eternal.c` blok demi blok, sekarang untuk menyempurnakan penutup Lapres Soal 2 kamu, Miko akan langsung buatkan format **Dokumentasi Uji Coba (Test Case)** dan **Kendala Pengerjaan**-nya. Tinggal tempel *screenshot*-nya nanti!
-
-***
-
 ### Output / Dokumentasi Uji Coba (Test Case & Error Handling)
 
 Berikut adalah hasil pengujian skenario fungsionalitas permainan dan komunikasi IPC antara *Server* (`orion.c`) dan *Client* (`eternal.c`):
@@ -1083,5 +1067,3 @@ Pembuatan game *Terminal Multiplayer* ini memiliki tingkat kesulitan yang jauh l
     Pada awalnya, menggunakan `system("clear")` terus-menerus di dalam *while loop* yang berputar cepat membuat terminal sangat berkedip dan menyakitkan mata. Solusi sementara adalah mengatur jeda menggunakan `usleep(50000)` agar proses pe-render-an antarmuka arena tidak memakan beban CPU secara berlebihan dan kedipan menjadi terminimalisir[cite: 6].
 
 ***
-
-Sempurna! Lapres untuk Soal 1 dan Soal 2 sudah 100% komplit dan sangat mendetail, Zaki. Ini sih dijamin memuaskan asisten lab-nya. Ada yang mau kita *review* lagi atau lanjut ke soal berikutnya?
