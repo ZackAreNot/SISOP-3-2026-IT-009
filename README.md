@@ -6,10 +6,10 @@
 
 > Asisten : MOO
 
-## Soal 1: The Knights Console
+## Soal 1: Present Day, Present Time
 
 ### Deskripsi Singkat
-Pada soal pertama ini, kita ditugaskan untuk merancang sebuah sistem aplikasi *chat* atau *console* berbasis *Client-Server* menggunakan *Socket Programming* di bahasa C. Sistem yang diberi nama "The Wired" ini memungkinkan banyak entitas (klien) untuk terhubung secara bersamaan dan saling bertukar pesan (fitur *broadcasting*). Keunikan dari sistem ini adalah adanya sistem peran (*role-based*), di mana terdapat peran "Administrator" dengan hak istimewa khusus. Jika seorang klien berhasil melakukan otentikasi masuk menggunakan *username* dan *password* rahasia, ia akan mendapatkan akses ke "The Knights Console". Dari *console* ini, Admin tidak bertukar pesan dengan entitas lain, melainkan dapat mengirimkan perintah *Remote Procedure Call* (RPC) ke server, seperti mengecek jumlah entitas yang aktif, melihat *uptime* (lama server menyala), hingga melakukan *Emergency Shutdown* untuk mematikan server secara paksa.
+Pada soal pertama ini, ditugaskan untuk merancang sebuah sistem aplikasi *chat* atau *console* berbasis *Client-Server* menggunakan *Socket Programming* di bahasa C. Sistem yang diberi nama "The Wired" ini memungkinkan banyak entitas (klien) untuk terhubung secara bersamaan dan saling bertukar pesan (fitur *broadcasting*). Keunikan dari sistem ini adalah adanya sistem peran (*role-based*), di mana terdapat peran "Administrator" dengan hak istimewa khusus. Jika seorang klien berhasil melakukan otentikasi masuk menggunakan *username* dan *password* rahasia, ia akan mendapatkan akses ke "The Knights Console". Dari *console* ini, Admin tidak bertukar pesan dengan entitas lain, melainkan dapat mengirimkan perintah *Remote Procedure Call* (RPC) ke server, seperti mengecek jumlah entitas yang aktif, melihat *uptime* (lama server menyala), hingga melakukan *Emergency Shutdown* untuk mematikan server secara paksa.
 
 ---
 
@@ -62,7 +62,7 @@ typedef enum {
 } MsgType;
 ```
 **Penjelasan:**
-Sistem *enum* ini adalah inti dari protokol IPC/RPC yang kita buat[cite: 2]. Karena server harus membedakan dengan cepat mana pesan *chat* dan mana perintah sistem, setiap data yang dikirim akan diberi "label" `MsgType`[cite: 2]:
+Sistem *enum* ini adalah inti dari protokol IPC/RPC yang ku buat[cite: 2]. Karena server harus membedakan dengan cepat mana pesan *chat* dan mana perintah sistem, setiap data yang dikirim akan diberi "label" `MsgType`[cite: 2]:
 *   **Proses Otentikasi**: `MSG_LOGIN` (untuk klien biasa), `MSG_ADMIN_AUTH` (untuk admin), `MSG_LOGIN_OK` (jika diterima), dan `MSG_LOGIN_FAIL` (jika nama sudah ada)[cite: 2].
 *   **Komunikasi & Sinyal Keluar**: `MSG_CHAT` digunakan untuk pesan antar entitas, sedangkan `MSG_EXIT` digunakan klien untuk memberi tahu server bahwa ia memutus koneksi[cite: 2].
 *   **Fungsi RPC**: `MSG_RPC_GET_USERS`, `MSG_RPC_GETUPTIME`, dan `MSG_RPC_SHUTDOWN` adalah label instruksi khusus yang hanya bisa dikirimkan oleh Admin dari dalam *console*[cite: 2].
@@ -110,7 +110,7 @@ void handle_exit(int sig){
 }
 ```
 **Penjelasan:**
-*   **Variabel Global**: Di sini kita mendefinisikan *socket descriptor* (`sock`), nama pengguna (`username`), dan sebuah *flag* penanda peran (`is_admin`)[cite: 1]. Variabel ini dibuat global karena akan diakses oleh *thread* utama maupun *thread* penerima pesan secara bersamaan[cite: 1].
+*   **Variabel Global**: Di sini mendefinisikan *socket descriptor* (`sock`), nama pengguna (`username`), dan sebuah *flag* penanda peran (`is_admin`)[cite: 1]. Variabel ini dibuat global karena akan diakses oleh *thread* utama maupun *thread* penerima pesan secara bersamaan[cite: 1].
 *   **Fungsi `handle_exit`**: Ini adalah fungsi *signal handler* yang akan dipanggil saat pengguna menekan `Ctrl+C` atau mengetik perintah keluar[cite: 1]. Alih-alih langsung mematikan program, fungsi ini "berpamitan" dengan sopan ke server dengan mengirimkan paket berlabel `MSG_EXIT`[cite: 1]. Setelah itu, koneksi *socket* diputus (`close(sock)`) secara aman sebelum mematikan program[cite: 1].
 
 #### 2. Thread Penerima Pesan (Asynchronous Listening)
@@ -521,7 +521,7 @@ Dalam proses pengerjaan pembuatan arsitektur jaringan *Client-Server* "The Wired
 
 
 ### Deskripsi Singkat
-Pada tantangan ini, kita diminta untuk merancang sebuah permainan terminal *multiplayer* bernama "The Battle of Eterion". Sistem ini menggunakan arsitektur *Client-Server*, di mana program `orion.c` bertindak sebagai Server (pengelola dunia/arena), dan `eternal.c` bertindak sebagai Client (pemain). Berbeda dengan sistem jaringan biasa, komunikasi di Eterion berjalan secara internal menggunakan **Inter-Process Communication (IPC)**[cite: 5, 8]. Terdapat tiga komponen IPC utama yang digunakan: **Shared Memory** untuk menyimpan data dunia secara *real-time* (seperti status HP dan *combat log*), **Message Queue** untuk bertukar pesan (seperti permintaan *login* dan *matchmaking*), serta **Semaphore** atau Mutex untuk mengunci memori agar tidak terjadi *Race Condition* saat dua pemain saling serang secara bersamaan[cite: 5, 6, 8]. Pemain memiliki *progress* tersendiri (Level, XP, Gold, Senjata) yang akan disimpan secara persisten[cite: 5]. Jika tidak menemukan lawan manusia, pemain akan dihadapkan dengan monster bot ("Wild Beast")[cite: 6, 8].
+Pada tantangan ini, diminta untuk merancang sebuah permainan terminal *multiplayer* bernama "The Battle of Eterion". Sistem ini menggunakan arsitektur *Client-Server*, di mana program `orion.c` bertindak sebagai Server (pengelola dunia/arena), dan `eternal.c` bertindak sebagai Client (pemain). Berbeda dengan sistem jaringan biasa, komunikasi di Eterion berjalan secara internal menggunakan **Inter-Process Communication (IPC)**[cite: 5, 8]. Terdapat tiga komponen IPC utama yang digunakan: **Shared Memory** untuk menyimpan data dunia secara *real-time* (seperti status HP dan *combat log*), **Message Queue** untuk bertukar pesan (seperti permintaan *login* dan *matchmaking*), serta **Semaphore** atau Mutex untuk mengunci memori agar tidak terjadi *Race Condition* saat dua pemain saling serang secara bersamaan[cite: 5, 6, 8]. Pemain memiliki *progress* tersendiri (Level, XP, Gold, Senjata) yang akan disimpan secara persisten[cite: 5]. Jika tidak menemukan lawan manusia, pemain akan dihadapkan dengan monster bot ("Wild Beast")[cite: 6, 8].
 
 ---
 
